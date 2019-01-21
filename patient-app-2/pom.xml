@@ -15,9 +15,9 @@
 		<!-- [START config] -->
 		<sql.dbName>ghs</sql.dbName>                       
 		<!-- Instance Connection Name - project:region:dbName -->
-		<sql.instanceName>cos420:us-central1:cos420-database</sql.instanceName>
-		<sql.userName>postgres</sql.userName>                    
-		<sql.password>cos420</sql.password> 
+		<sql.instanceName></sql.instanceName>
+		<sql.userName></sql.userName>
+		<sql.password></sql.password>
 		<!-- [END config] -->
 
 		<appengine.maven.plugin.version>1.3.2</appengine.maven.plugin.version>

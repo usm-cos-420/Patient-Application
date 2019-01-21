@@ -15,7 +15,9 @@
 			<h4 class="book-title">
 				${fn:escapeXml(patient.firstName)} ${fn:escapeXml(patient.lastName)}
 				<small>${fn:escapeXml(patient.birthDate)}</small>
-			</h4>
+			</h4> 
+			<p> Gender: ${fn:escapeXml(patient.gender)} </p>
+			<p> Address: ${fn:escapeXml(patient.address)} </p>
 		</div>
 	</div>
 </div>

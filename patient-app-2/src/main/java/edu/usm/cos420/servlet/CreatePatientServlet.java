@@ -32,6 +32,8 @@ public class CreatePatientServlet extends HttpServlet{
 		Patient patient = new Patient();
 		patient.setFirstName(req.getParameter("firstName"));
 		patient.setLastName(req.getParameter("lastName"));
+		patient.setGender(req.getParameter("gender"));
+		patient.setAddress(req.getParameter("address"));
 		patient.setBirthDate(Date.valueOf(req.getParameter("birthDate")));
 
 		String dbUrl = this.getServletContext().getInitParameter("sql.urlRemote");

@@ -25,7 +25,7 @@ public class CloudSqlDao implements PatientDao {
 	public void createPatientTable() throws SQLException {
 		try(Connection conn = DriverManager.getConnection(this.dbUrl)){
 			String createDbQuery =  "CREATE TABLE IF NOT EXISTS patients ( id SERIAL PRIMARY KEY, "
-					+ "firstName VARCHAR(255), lastName VARCHAR(255), birthDate DATE)";
+					+ "firstName VARCHAR(255), lastName VARCHAR(255), gender VARCHAR(255), address VARCHAR(255), birthDate DATE)";
 
 			Statement stmt = conn.createStatement();
 			stmt.executeUpdate(createDbQuery);
@@ -39,14 +39,16 @@ public class CloudSqlDao implements PatientDao {
 	public Long createPatient(Patient patient) throws SQLException {
 		Long id = 0L;
 		final String createPatientString = "INSERT INTO patients "
-				+ "(firstName, lastName, birthDate) "
-				+ "VALUES (?, ?, ?)";
+				+ "(firstName, lastName, gender, address, birthDate) "
+				+ "VALUES (?, ?, ?, ?, ?)";
 		try (Connection conn = DriverManager.getConnection(this.dbUrl);
 				final PreparedStatement createPatientStmt = conn.prepareStatement(createPatientString,
 						Statement.RETURN_GENERATED_KEYS)) {
 			createPatientStmt.setString(1, patient.getFirstName());
 			createPatientStmt.setString(2, patient.getLastName());
-			createPatientStmt.setDate(3, (Date) patient.getBirthDate());
+			createPatientStmt.setString(3, patient.getGender());
+			createPatientStmt.setString(4, patient.getAddress());
+			createPatientStmt.setDate(5, (Date) patient.getBirthDate());
 
 			createPatientStmt.executeUpdate();
 			try (ResultSet keys = createPatientStmt.getGeneratedKeys()) {
@@ -70,7 +72,9 @@ public class CloudSqlDao implements PatientDao {
 				patient.setId(keys.getInt(1));
 				patient.setFirstName(keys.getString(2));
 				patient.setLastName(keys.getString(3));
-				patient.setBirthDate(keys.getDate(4));
+				patient.setGender(keys.getString(4));
+				patient.setAddress(keys.getString(5));
+				patient.setBirthDate(keys.getDate(6));
 
 				return patient;
 			}
@@ -79,14 +83,16 @@ public class CloudSqlDao implements PatientDao {
 
 	@Override
 	public void updatePatient(Patient patient) throws SQLException {
-		final String updateBookString = "UPDATE patients SET firstName = ?, lastName = ?, birthDate = ?  WHERE id = ?";
+		final String updateBookString = "UPDATE patients SET firstName = ?, lastName = ?, gender = ?, address = ?, birthDate = ?  WHERE id = ?";
 		try (Connection conn = DriverManager.getConnection(this.dbUrl);
-				PreparedStatement updateBookStmt = conn.prepareStatement(updateBookString)) {
-			updateBookStmt.setString(1, patient.getFirstName());
-			updateBookStmt.setString(2, patient.getLastName());
-			updateBookStmt.setDate(3, (Date) patient.getBirthDate());
-			updateBookStmt.setLong(4, patient.getId());
-			updateBookStmt.executeUpdate();
+				PreparedStatement updatePatientStmt = conn.prepareStatement(updateBookString)) {
+			updatePatientStmt.setString(1, patient.getFirstName());
+			updatePatientStmt.setString(2, patient.getLastName());
+			updatePatientStmt.setString(3, patient.getGender());
+			updatePatientStmt.setString(4, patient.getAddress());
+			updatePatientStmt.setDate(5, (Date) patient.getBirthDate());
+			updatePatientStmt.setLong(6, patient.getId());
+			updatePatientStmt.executeUpdate();
 		}
 
 	}
@@ -109,7 +115,7 @@ public class CloudSqlDao implements PatientDao {
 			offset = Integer.parseInt(cursor);
 		}
 		
-		final String listPatientsString = "SELECT id, firstName, lastName, birthDate, count(*) OVER() AS total_count FROM patients ORDER BY lastName, firstName ASC "
+		final String listPatientsString = "SELECT id, firstName, lastName, gender, address, birthDate, count(*) OVER() AS total_count FROM patients ORDER BY lastName, firstName ASC "
 				+ "LIMIT 10 OFFSET ?";
 		try (Connection conn = DriverManager.getConnection(this.dbUrl);
 				PreparedStatement listPatientStmt = conn.prepareStatement(listPatientsString)) {
@@ -123,7 +129,9 @@ public class CloudSqlDao implements PatientDao {
 					patient.setId(rs.getInt(1));
 					patient.setFirstName(rs.getString(2));
 					patient.setLastName(rs.getString(3));
-					patient.setBirthDate(rs.getDate(4));
+					patient.setGender(rs.getString(4));
+					patient.setAddress(rs.getString(5));
+					patient.setBirthDate(rs.getDate(6));
 
 					resultPatients.add(patient);
 
@@ -136,8 +144,6 @@ public class CloudSqlDao implements PatientDao {
 			} else {
 				return new Result<>(resultPatients);
 			}
-			
-			
 		}
 	}
 

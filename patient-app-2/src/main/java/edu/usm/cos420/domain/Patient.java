@@ -6,6 +6,8 @@ public class Patient {
 	int id;
 	String firstName;
 	String lastName;
+	String gender; 
+	String address;
 	Date birthDate;
 	
 	public int getId() {
@@ -32,6 +34,22 @@ public class Patient {
 		this.lastName = lastName;
 	}
 	
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	public Date getBirthDate() {
 		return birthDate;
 	}

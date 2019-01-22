@@ -52,14 +52,14 @@ public class UpdatePatientServlet extends HttpServlet{
 		}
 		
 		try {
-			// [START bookBuilder]
 			Patient patient = new Patient();
 			patient.setId(Integer.parseInt(req.getParameter("id")));
 			patient.setFirstName(req.getParameter("firstName"));
 			patient.setLastName(req.getParameter("lastName"));
+			patient.setGender(req.getParameter("gender"));
+			patient.setAddress(req.getParameter("address"));
 			patient.setBirthDate(Date.valueOf(req.getParameter("birthDate")));
 					
-			// [END bookBuilder]
 			dao.updatePatient(patient);
 			resp.sendRedirect("/read?id=" + req.getParameter("id"));
 		} catch (Exception e) {

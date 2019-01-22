@@ -34,7 +34,7 @@ public class ReadPatientServlet extends HttpServlet{
 			req.setAttribute("page", "view");
 			req.getRequestDispatcher("/base.jsp").forward(req, resp);
 		} catch (Exception e) {
-			throw new ServletException("Error reading book", e);
+			throw new ServletException("Error reading patient", e);
 		}
 	}
 }

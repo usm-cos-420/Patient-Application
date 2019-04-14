@@ -62,11 +62,11 @@ public class CloudSqlDao implements PatientDao {
 
 	@Override
 	public Patient readPatient(Long patientId) throws SQLException {
-		final String readBookString = "SELECT * FROM patients WHERE id = ?";
+		final String readPatientString = "SELECT * FROM patients WHERE id = ?";
 		try (Connection conn = DriverManager.getConnection(this.dbUrl);
-				PreparedStatement readBookStmt = conn.prepareStatement(readBookString)) {
-			readBookStmt.setLong(1, patientId);
-			try (ResultSet keys = readBookStmt.executeQuery()) {
+		    PreparedStatement readPatientStmt = conn.prepareStatement(readPatientString)) {
+			readPatientStmt.setLong(1, patientId);
+			try (ResultSet keys = readPatientStmt.executeQuery()) {
 				keys.next();
 				Patient patient = new Patient();
 				patient.setId(keys.getInt(1));
@@ -83,9 +83,9 @@ public class CloudSqlDao implements PatientDao {
 
 	@Override
 	public void updatePatient(Patient patient) throws SQLException {
-		final String updateBookString = "UPDATE patients SET firstName = ?, lastName = ?, gender = ?, address = ?, birthDate = ?  WHERE id = ?";
+		final String updatePatientString = "UPDATE patients SET firstName = ?, lastName = ?, gender = ?, address = ?, birthDate = ?  WHERE id = ?";
 		try (Connection conn = DriverManager.getConnection(this.dbUrl);
-				PreparedStatement updatePatientStmt = conn.prepareStatement(updateBookString)) {
+			PreparedStatement updatePatientStmt = conn.prepareStatement(updatePatientString)) {
 			updatePatientStmt.setString(1, patient.getFirstName());
 			updatePatientStmt.setString(2, patient.getLastName());
 			updatePatientStmt.setString(3, patient.getGender());
@@ -99,11 +99,11 @@ public class CloudSqlDao implements PatientDao {
 
 	@Override
 	public void deletePatient(Long patientId) throws SQLException {
-		final String deleteBookString = "DELETE FROM patients WHERE id = ?";
+		final String deletePatientString = "DELETE FROM patients WHERE id = ?";
 		try (Connection conn = DriverManager.getConnection(this.dbUrl);
-				PreparedStatement deleteBookStmt = conn.prepareStatement(deleteBookString)) {
-			deleteBookStmt.setLong(1, patientId);
-			deleteBookStmt.executeUpdate();
+			PreparedStatement deletePatientStmt = conn.prepareStatement(deletePatientString)) {
+			deletePatientStmt.setLong(1, patientId);
+			deletePatientStmt.executeUpdate();
 		}
 	}
 

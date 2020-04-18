@@ -11,31 +11,36 @@
 	<artifactId>patient-app-2</artifactId>
 
 	<properties>
+		<!--replace with the name of your GCP project -->
+		<app.deploy.projectId></app.deploy.projectId>
+		<app.deploy.version>GCLOUD_CONFIG</app.deploy.version>
+
 		<!-- [START config] -->
-		<sql.dbName>ghs</sql.dbName>                       
+		<sql.dbName>ghs</sql.dbName>
+
 		<!-- Instance Connection Name - project:region:dbName -->
-		<sql.instanceName>patient-app:us-east1:cos420</sql.instanceName>
-		<sql.userName></sql.userName>                    
-		<sql.password></sql.password> 
+		<!--replace with the name of your Cloud SQL instance name -->
+		<sql.instanceName></sql.instanceName>
+
+		<!-- Replace with your un/pw for your Cloud SQL database -->
+		<sql.userName></sql.userName>
+		<sql.password></sql.password>
 		<!-- [END config] -->
 
-		<appengine.maven.plugin.version>1.3.2</appengine.maven.plugin.version>
-		<appengine.api.sdk.version>1.9.71</appengine.api.sdk.version>
+		<appengine.maven.plugin.version>2.2.0</appengine.maven.plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
-		<maven.war.filteringDeploymentDescriptors>true</maven.war.filteringDeploymentDescriptors>
-
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>com.google.cloud</groupId>
-				<artifactId>google-cloud-bom</artifactId>
-				<version>0.78.0-alpha</version>
+				<artifactId>libraries-bom</artifactId>
+				<version>5.1.0</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -43,6 +48,17 @@
 	</dependencyManagement>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.google.cloud.sql</groupId>
+			<artifactId>postgres-socket-factory</artifactId>
+			<version>1.0.15</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.2.12.jre7</version>
+		</dependency>
 		<!-- Compile/runtime dependencies -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -57,33 +73,17 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.google.cloud.sql</groupId>
-			<artifactId>postgres-socket-factory</artifactId>
-			<version>1.0.11</version>
-		</dependency>
-		
-
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>42.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.api-client</groupId>
-			<artifactId>google-api-client-appengine</artifactId>
-			<version>1.28.0</version>
-		</dependency>
-		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.appengine</groupId>
-			<artifactId>appengine-api-1.0-sdk</artifactId>
-			<version>1.9.71</version>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client-appengine</artifactId>
+			<version>1.30.9</version>
 		</dependency>
+
 		<!-- Test Dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -91,32 +91,57 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-	
 	</dependencies>
 
 	<build>
-		<!-- for hot reload of the web application -->
+		<!-- for hot reload of the web application-->
 		<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
 		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>versions-maven-plugin</artifactId>
-				<version>2.3</version>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>display-dependency-updates</goal>
-							<goal>display-plugin-updates</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 			<plugin>
 				<groupId>com.google.cloud.tools</groupId>
 				<artifactId>appengine-maven-plugin</artifactId>
 				<version>${appengine.maven.plugin.version}</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.2.3</version>
+				<configuration>
+					<webResources>
+						<resource>
+							<filtering>true</filtering>
+							<directory>src/main/webapp</directory>
+							<includes>
+								<include>**/web.xml</include>
+							</includes>
+						</resource>
+					</webResources>
+					<warSourceDirectory>src/main/webapp</warSourceDirectory>
+					<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0-M3</version>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<!-- appengine-maven-plugin requires Maven 3.5.0 or later -->
+								<requireMavenVersion>
+									<version>3.5.0</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

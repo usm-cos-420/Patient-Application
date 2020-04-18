@@ -15,7 +15,7 @@
   </parent>
 
   <properties>
-    <app.deploy.projectId>***CHANGE ME***</app.deploy.projectId> <!--replace with the name of your GCP project -->
+    <app.deploy.projectId></app.deploy.projectId> <!--replace with the name of your GCP project -->
     <app.deploy.version>GCLOUD_CONFIG</app.deploy.version>
     <appengine.maven.plugin.version>2.2.0</appengine.maven.plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

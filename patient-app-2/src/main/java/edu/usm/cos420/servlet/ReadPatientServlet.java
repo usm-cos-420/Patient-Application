@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import edu.usm.cos420.dao.CloudSqlDao;
+import edu.usm.cos420.dao.PatientCloudSqlDao;
 import edu.usm.cos420.dao.PatientDao;
 import edu.usm.cos420.domain.Patient;
 
@@ -23,7 +23,7 @@ public class ReadPatientServlet extends HttpServlet{
 
 		PatientDao dao = null;
 		try {
-			dao = new CloudSqlDao(dbUrl);
+			dao = new PatientCloudSqlDao(dbUrl);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}

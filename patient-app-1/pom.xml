@@ -15,21 +15,20 @@
   </parent>
 
   <properties>
-    <appengine.maven.plugin.version>1.3.2</appengine.maven.plugin.version>
-    <appengine.api.sdk.version>1.9.71</appengine.api.sdk.version>
+    <appengine.maven.plugin.version>2.2.0</appengine.maven.plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
   </properties>
-  
+
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>com.google.cloud</groupId>
-        <artifactId>google-cloud-bom</artifactId>
-        <version>0.78.0-alpha</version>
+        <artifactId>libraries-bom</artifactId>
+        <version>5.1.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -56,12 +55,7 @@
       <version>1.2</version>
     </dependency>
 
-    <dependency>
-<groupId>com.google.appengine</groupId>
-<artifactId>appengine-api-1.0-sdk</artifactId>
-<version>1.9.71</version>
-</dependency>
-<!-- Test Dependencies -->
+    <!-- Test Dependencies -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -75,24 +69,31 @@
     <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>versions-maven-plugin</artifactId>
-        <version>2.3</version>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals>
-              <goal>display-dependency-updates</goal>
-              <goal>display-plugin-updates</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
         <groupId>com.google.cloud.tools</groupId>
         <artifactId>appengine-maven-plugin</artifactId>
         <version>${appengine.maven.plugin.version}</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>3.0.0-M3</version>
+        <executions>
+          <execution>
+            <id>enforce-maven</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <!-- appengine-maven-plugin requires Maven 3.5.0 or later -->
+                <requireMavenVersion>
+                  <version>3.5.0</version>
+                </requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

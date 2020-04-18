@@ -13,12 +13,11 @@ import java.util.List;
 import edu.usm.cos420.domain.Patient;
 import edu.usm.cos420.domain.Result;
 
-public class CloudSqlDao implements PatientDao {
+public class PatientCloudSqlDao implements PatientDao {
 	String dbUrl;
 
-	public CloudSqlDao(String dbUrl) throws SQLException {
+	public PatientCloudSqlDao(String dbUrl) throws SQLException {
 		this.dbUrl = dbUrl;
-		System.out.println("Cloud SQL Dao: " + this.dbUrl);
 		this.createPatientTable();
 	}
 
@@ -119,7 +118,6 @@ public class CloudSqlDao implements PatientDao {
 				+ "LIMIT 10 OFFSET ?";
 		try (Connection conn = DriverManager.getConnection(this.dbUrl);
 				PreparedStatement listPatientStmt = conn.prepareStatement(listPatientsString)) {
-			System.out.println("Querying Patients Table: " + listPatientsString );
 			listPatientStmt.setInt(1, offset);
 			List<Patient> resultPatients = new ArrayList<>();
 

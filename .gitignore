@@ -1,9 +1,5 @@
 # Compiled class file
 *.class
-.settings/
-/target
-.project
-.classpath
 
 # Log file
 *.log
@@ -27,5 +23,7 @@
 hs_err_pid*
 
 # IntelliJ Files
-.idea/
 *.iml
+.idea
+out/
+.idea/inspectionProfiles/

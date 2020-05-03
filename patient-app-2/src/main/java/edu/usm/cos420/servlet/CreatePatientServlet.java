@@ -3,6 +3,7 @@ package edu.usm.cos420.servlet;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,7 +37,13 @@ public class CreatePatientServlet extends HttpServlet{
 		patient.setAddress(req.getParameter("address"));
 		patient.setBirthDate(Date.valueOf(req.getParameter("birthDate")));
 
-		String dbUrl = this.getServletContext().getInitParameter("sql.urlRemote");
+		//Get DB information
+		Properties properties = new Properties();
+		properties.load(getClass().getClassLoader().getResourceAsStream("database.properties"));
+
+		String dbUrl = String.format(this.getServletContext().getInitParameter("sql.urlRemote"),
+				properties.getProperty("sql.dbName"), properties.getProperty("sql.instanceName"),
+				properties.getProperty("sql.userName"), properties.getProperty("sql.password"));
 
 		PatientDao dao = null;
 		try {

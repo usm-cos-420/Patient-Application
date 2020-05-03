@@ -14,19 +14,6 @@
 		<!--replace with the name of your GCP project -->
 		<app.deploy.projectId></app.deploy.projectId>
 		<app.deploy.version>GCLOUD_CONFIG</app.deploy.version>
-
-		<!-- [START config] -->
-		<sql.dbName>ghs</sql.dbName>
-
-		<!-- Instance Connection Name - project:region:dbName -->
-		<!--replace with the name of your Cloud SQL instance name -->
-		<sql.instanceName></sql.instanceName>
-
-		<!-- Replace with your un/pw for your Cloud SQL database -->
-		<sql.userName></sql.userName>
-		<sql.password></sql.password>
-		<!-- [END config] -->
-
 		<appengine.maven.plugin.version>2.2.0</appengine.maven.plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

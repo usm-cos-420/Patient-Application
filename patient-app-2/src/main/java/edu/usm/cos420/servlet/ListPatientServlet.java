@@ -3,6 +3,7 @@ package edu.usm.cos420.servlet;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,8 +23,12 @@ public class ListPatientServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		
 		//Get DB information
-		String dbUrl = this.getServletContext().getInitParameter("sql.urlRemote");
-		System.out.println("Database URL: " + dbUrl );
+		Properties properties = new Properties();
+		properties.load(getClass().getClassLoader().getResourceAsStream("database.properties"));
+
+		String dbUrl = String.format(this.getServletContext().getInitParameter("sql.urlRemote"),
+				properties.getProperty("sql.dbName"), properties.getProperty("sql.instanceName"),
+				properties.getProperty("sql.userName"), properties.getProperty("sql.password"));
 		PatientDao dao = null;
 		
 		try {

@@ -49,7 +49,13 @@ public class UpdatePatientServlet extends HttpServlet{
 
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String dbUrl = this.getServletContext().getInitParameter("sql.urlRemote");
+		//Get DB information
+		Properties properties = new Properties();
+		properties.load(getClass().getClassLoader().getResourceAsStream("database.properties"));
+
+		String dbUrl = String.format(this.getServletContext().getInitParameter("sql.urlRemote"),
+				properties.getProperty("sql.dbName"), properties.getProperty("sql.instanceName"),
+				properties.getProperty("sql.userName"), properties.getProperty("sql.password"));
 		PatientDao dao = null;
 		
 		try {
